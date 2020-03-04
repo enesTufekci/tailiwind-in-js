@@ -103,19 +103,19 @@ let Button = tw.button($ => [
 ```tsx
 import { tw } from "@tailwind-in-js/react";
 
-let buttonBase = tw.macro([
+let buttonBase = tw.macro(() => [
   "text-gray-700", //
   "rounded-md",
   "shadow-sm"
 ]);
 
-let buttonPrimary = tw.macro([
+let buttonPrimary = tw.macro($ => [
   "bg-indigo-400",
   $.hover(["bg-indigo-500"]),
   $.focus(["bg-indigo-600"])
 ]);
 
-let buttonSecondary = tw.macro([
+let buttonSecondary = tw.macro($ => [
   "bg-green-400",
   $.hover(["bg-green-500"]),
   $.focus(["bg-green-600"])
