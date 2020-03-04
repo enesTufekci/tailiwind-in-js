@@ -13,7 +13,7 @@ export let append = (strToAppend: string) => {
       .join(' ');
 };
 
-export let _if = (prop: boolean, stylesA: string[], stylesB: string[]) =>
+export let _if = (prop: boolean, stylesA: string[], stylesB: string[] = []) =>
   prop ? stylesA.join(' ') : stylesB.join(' ');
 
 export let _modifiers = modifiers.reduce(
