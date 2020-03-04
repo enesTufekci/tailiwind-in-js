@@ -122,7 +122,7 @@ let buttonSecondary = tw.macro($ => [
 ]);
 
 let Button = tw.button(($, { variant }) => [
-  buttonBase,
+  ...buttonBase,
   $.if(variant === "primary", buttonPrimary),
   $.if(variant === "secondary", buttonSecondary)
 ]);
