@@ -32,10 +32,21 @@ export let _media = media.reduce(
   {} as Record<'sm' | 'md' | 'lg' | 'xl', (classNames: string[]) => string>
 );
 
+export let child = <P>(Component: React.FC<P>, styles: string[]) => {
+  const childId = (Component as any).twId;
+  if (!childId) {
+    throw new Error('You can only use Tailwind Components as child.');
+  }
+  return {
+    [childId]: styles,
+  };
+};
+
 export let helpers = {
   if: _if,
   ..._modifiers,
   ..._media,
+  child,
 };
 
 export type Helpers = typeof helpers;

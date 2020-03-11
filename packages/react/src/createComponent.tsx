@@ -1,30 +1,55 @@
 import React from 'react';
-import isPropValid from '@emotion/is-prop-valid';
 
 import { htmlTags } from './html';
 import { helpers, Helpers } from './helpers';
+import { getValidProps, extractStyleData } from './utils';
 
 import { TailwindComponents, StyleFn } from './types';
 
+let TailwindComponent = React.createContext<Record<string, string>>({});
+
+function useTailwindContext(ids: string[]) {
+  let value = React.useContext(TailwindComponent);
+
+  return ids.reduce<Record<string, string>>(
+    (acc, next) => ({
+      ...acc,
+      [next]: value[next] ?? '',
+    }),
+    {}
+  );
+}
+
 function createComponent(helpers: Helpers) {
   return function<T extends keyof HTMLElementTagNameMap>(htmlTag: T) {
-    return function<P>(fn: StyleFn<P>) {
-      return React.forwardRef((props: P & { className?: string }, ref: any) => {
-        let className = [...fn({ ...helpers }, props), props.className ?? '']
-          .filter(item => item !== '')
-          .join(' ');
+    const twId = String(Math.random());
+    return function<P>(fn: StyleFn<P> = () => []) {
+      let Component = React.forwardRef(
+        (props: P & { className?: string }, ref: any) => {
+          let { ownClassNames, children: _children } = extractStyleData(
+            fn({ ...helpers }, props)
+          );
+          const styles = useTailwindContext([twId, ...Object.keys(_children)]);
 
-        let validProps = Object.keys(props).reduce<Partial<P>>(
-          (acc, next) =>
-            isPropValid(next)
-              ? { ...acc, [next]: props[next as keyof P] }
-              : acc,
-          {}
-        );
+          let className = [ownClassNames, styles[twId], props.className ?? '']
+            .filter(item => item !== '')
+            .join(' ');
 
-        let _props = { ...validProps, ref, className };
-        return React.createElement(htmlTag, _props);
-      });
+          let validProps = getValidProps(props);
+
+          let _props = { ...validProps, ref, className };
+
+          return (
+            <TailwindComponent.Provider value={{ ...styles, ..._children }}>
+              {React.createElement(htmlTag, _props)}
+            </TailwindComponent.Provider>
+          );
+        }
+      );
+
+      (Component as any).twId = twId;
+      Component.displayName = `TW.${htmlTag}`;
+      return Component;
     };
   };
 }
