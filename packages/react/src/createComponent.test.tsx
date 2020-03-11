@@ -5,15 +5,15 @@ import { components } from './createComponent';
 
 describe('createComponent()', () => {
   test('basic', () => {
-    const Component = components.div(() => ['m-1']);
-    const { container } = render(<Component />);
+    let Component = components.div(() => ['m-1']);
+    let { container } = render(<Component />);
     expect(container.querySelector('div')!.className).toEqual('m-1');
   });
 
   test('with child', () => {
-    const Button = components.button();
-    const Wrapper = components.div($ => ['m-1', $.child(Button, ['m-2'])]);
-    const { getByTestId } = render(
+    let Button = components.button();
+    let Wrapper = components.div($ => ['m-1', $.child(Button, ['m-2'])]);
+    let { getByTestId } = render(
       <Wrapper data-testid="wrapper">
         <Button data-testid="button">Hello</Button>
       </Wrapper>
@@ -23,9 +23,9 @@ describe('createComponent()', () => {
   });
 
   test('with className prop', () => {
-    const Button = components.button();
-    const Wrapper = components.div($ => ['m-1', $.child(Button, ['m-2'])]);
-    const { getByTestId } = render(
+    let Button = components.button();
+    let Wrapper = components.div($ => ['m-1', $.child(Button, ['m-2'])]);
+    let { getByTestId } = render(
       <Wrapper data-testid="wrapper" className="wrapper">
         <Button data-testid="button" className="button">
           Hello
@@ -37,13 +37,19 @@ describe('createComponent()', () => {
   });
 
   test('child with updates', async () => {
-    const Button = components.button();
-    const Wrapper = components.div<{ isActive: boolean }>(($, { isActive }) => [
+    let Button = components.button(() => ['text-gray-100']);
+    let Wrapper = components.div<{ isActive: boolean }>(($, { isActive }) => [
       'm-1',
-      $.child(Button, [$.if(isActive, ['bg-gray-100'], ['bg-gray-200'])]),
+      $.child(Button, [
+        $.if(
+          isActive,
+          ['bg-gray-100', 'text-gray-500'],
+          ['bg-gray-200', 'text-gray-500']
+        ),
+      ]),
     ]);
-    const Component = () => {
-      const [isActive, setIsActive] = React.useState(false);
+    let Component = () => {
+      let [isActive, setIsActive] = React.useState(false);
       return (
         <Wrapper data-testid="wrapper" isActive={isActive}>
           <Button data-testid="button" onClick={() => setIsActive(s => !s)}>
@@ -52,14 +58,20 @@ describe('createComponent()', () => {
         </Wrapper>
       );
     };
-    const { getByTestId } = render(<Component />);
+    let { getByTestId } = render(<Component />);
     expect(getByTestId('wrapper').className).toEqual('m-1');
-    expect(getByTestId('button').className).toEqual('bg-gray-200');
+    expect(getByTestId('button').className).toEqual(
+      'text-gray-100 bg-gray-200 text-gray-500'
+    );
 
     fireEvent.click(getByTestId('button'));
-    expect(getByTestId('button').className).toEqual('bg-gray-100');
+    expect(getByTestId('button').className).toEqual(
+      'text-gray-100 bg-gray-100 text-gray-500'
+    );
 
     fireEvent.click(getByTestId('button'));
-    expect(getByTestId('button').className).toEqual('bg-gray-200');
+    expect(getByTestId('button').className).toEqual(
+      'text-gray-100 bg-gray-200 text-gray-500'
+    );
   });
 });

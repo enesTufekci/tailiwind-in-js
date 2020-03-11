@@ -5,7 +5,7 @@ import { helpers } from './helpers';
 export type StyleFn<T> = (
   $: typeof helpers,
   props: T
-) => (string | { [id: string]: string[] })[];
+) => (string | { [id: string]: string })[];
 
 export type TailwindComponentFactory<U> = <T>(
   fn?: StyleFn<T>

@@ -38,7 +38,7 @@ export let child = <P>(Component: React.FC<P>, styles: string[]) => {
     throw new Error('You can only use Tailwind Components as child.');
   }
   return {
-    [childId]: styles,
+    [childId]: styles.join(' '),
   };
 };
 
