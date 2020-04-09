@@ -27,6 +27,6 @@ export function ThemeProvider<T extends string>(props: ThemeProviderProps<T>) {
 }
 
 export function useTheme() {
-  let {theme, changeTheme}= React.useContext(ThemeContext)
-  return {theme, changeTheme}
+  let { theme, changeTheme } = React.useContext(ThemeContext);
+  return { theme, changeTheme };
 }

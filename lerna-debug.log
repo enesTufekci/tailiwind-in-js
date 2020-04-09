@@ -1,0 +1,16 @@
+34 error Error: Command failed: git commit -F /private/var/folders/2q/2g1vncgj3mn20gtpsvr0sztr_w9w7f/T/d97baa85-a1f8-49ae-a986-3942df5627ae/lerna-commit.txt
+34 error husky > pre-commit (node v12.10.0)
+34 error Defaulting to "tsdx lint src"
+34 error You can override this in the package.json scripts, like "lint": "tsdx lint src otherDir"
+34 error
+34 error /Users/enes.tuefekci/Workspace/oss/tailwind-in-js/packages/react/src/context.tsx
+34 error   30:8   error  Replace `theme,·changeTheme}=·React.useContext(ThemeContext)` with `·theme,·changeTheme·}·=·React.useContext(ThemeContext);`  prettier/prettier
+34 error   31:11  error  Replace `theme,·changeTheme}` with `·theme,·changeTheme·};`                                                                   prettier/prettier
+34 error
+34 error ✖ 2 problems (2 errors, 0 warnings)
+34 error   2 errors and 0 warnings potentially fixable with the `--fix` option.
+34 error
+34 error husky > pre-commit hook failed (add --no-verify to bypass)
+34 error
+34 error     at makeError (/Users/enes.tuefekci/Workspace/oss/tailwind-in-js/node_modules/execa/index.js:174:9)
+34 error     at /Users/enes.tuefekci/Workspace/oss/tailwind-in-js/node_modules/execa/index.js:278:16
