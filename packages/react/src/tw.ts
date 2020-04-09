@@ -3,7 +3,7 @@ import { TailwindComponents } from './types';
 import { Helpers, helpers } from './helpers';
 
 interface TW extends TailwindComponents {
-  macro: (fn: (helpers: Helpers) => string[]) => string[];
+  macro: (fn: (helpers: Omit<Helpers, 'theme'>) => string[]) => string[];
 }
 
 export const tw: TW = {

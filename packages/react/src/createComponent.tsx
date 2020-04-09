@@ -2,15 +2,20 @@ import React from 'react';
 import isPropValid from '@emotion/is-prop-valid';
 
 import { htmlTags } from './html';
-import { helpers, Helpers } from './helpers';
+import { createHelpers, Helpers } from './helpers';
+import { ThemeContext } from './context';
 
 import { TailwindComponents, StyleFn } from './types';
 
-function createComponent(helpers: Helpers) {
+function createComponent(createHelpers: (theme: string) => Helpers) {
   return function<T extends keyof HTMLElementTagNameMap>(htmlTag: T) {
     return function<P>(fn: StyleFn<P>) {
       return React.forwardRef((props: P & { className?: string }, ref: any) => {
-        let className = [...fn({ ...helpers }, props), props.className ?? '']
+        let { theme } = React.useContext(ThemeContext);
+        let className = [
+          ...fn({ ...createHelpers(theme) }, props),
+          props.className ?? '',
+        ]
           .filter(item => item !== '')
           .join(' ');
 
@@ -29,7 +34,7 @@ function createComponent(helpers: Helpers) {
   };
 }
 
-let componentFactory = createComponent(helpers);
+let componentFactory = createComponent(createHelpers);
 
 export let components = htmlTags.reduce(
   (acc, htmlTag) => ({ ...acc, [htmlTag]: componentFactory(htmlTag) }),

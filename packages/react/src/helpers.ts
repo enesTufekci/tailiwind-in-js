@@ -32,10 +32,26 @@ export let _media = media.reduce(
   {} as Record<'sm' | 'md' | 'lg' | 'xl', (classNames: string[]) => string>
 );
 
+export let _theme = (theme: string) => (data: Record<string, string[]>) => {
+  return data[theme].join(' ');
+};
+
+export interface Helpers
+  extends Record<'sm' | 'md' | 'lg' | 'xl', (classNames: string[]) => string>,
+    Record<'hover' | 'active' | 'focus', (classNames: string[]) => string> {
+  if: typeof _if;
+  theme: ReturnType<typeof _theme>;
+}
+
 export let helpers = {
   if: _if,
   ..._modifiers,
   ..._media,
 };
 
-export type Helpers = typeof helpers;
+export let createHelpers = (theme: string): Helpers => ({
+  theme: _theme(theme),
+  ...helpers,
+});
+
+// export type Helpers = typeof helpers;
