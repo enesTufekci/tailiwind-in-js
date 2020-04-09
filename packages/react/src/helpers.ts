@@ -32,8 +32,10 @@ export let _media = media.reduce(
   {} as Record<'sm' | 'md' | 'lg' | 'xl', (classNames: string[]) => string>
 );
 
-export let _theme = (theme: string) => (data: Record<string, string[]>) => {
-  return data[theme].join(' ');
+export let _theme = (theme: string) => (
+  themeData: Record<string, string[]>
+) => {
+  return (themeData[theme] || ['']).join(' ');
 };
 
 export interface Helpers

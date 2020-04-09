@@ -44,4 +44,15 @@ describe('tw', () => {
       'bg-gray-900 sm:bg-green-900'
     );
   });
+
+  it('it doesnt fail without ThemeProvider', () => {
+    let Button = tw.button($ => [
+      $.theme({
+        light: ['bg-gray-100'],
+      }),
+    ]);
+
+    let { getByTestId } = render(<Button data-testid="no-theme">Test</Button>);
+    expect(getByTestId('no-theme').className).toEqual('');
+  });
 });
